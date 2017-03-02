@@ -151,8 +151,25 @@ class Wp_Odoo_Form_Integrator {
 
 		$plugin_admin = new Wp_Odoo_Form_Integrator_Admin( $this->get_plugin_name(), $this->get_version() );
 
-		$this->loader->add_action( 'admin_enqueue_scripts', $plugin_admin, 'enqueue_styles' );
-		$this->loader->add_action( 'admin_enqueue_scripts', $plugin_admin, 'enqueue_scripts' );
+		// $this->loader->add_action( 'admin_enqueue_scripts', $plugin_admin, 'enqueue_styles' );
+		// $this->loader->add_action( 'admin_enqueue_scripts', $plugin_admin, 'enqueue_scripts' );
+		$this->loader->add_action( 'admin_menu', $plugin_admin, 'add_plugin_admin_menu' );
+
+		$this->loader->add_action( 'wp_ajax_test_odoo_connection', $plugin_admin, 'test_odoo_connection' );
+
+		$this->loader->add_action( 'wp_ajax_get_form_types', $plugin_admin, 'get_form_types' );
+
+		$this->loader->add_action( 'wp_ajax_get_all_forms', $plugin_admin, 'get_all_forms' );
+
+		$this->loader->add_action( 'wp_ajax_get_form_fields', $plugin_admin, 'get_form_fields' );
+
+		$this->loader->add_action( 'wp_ajax_get_odoo_models', $plugin_admin, 'get_odoo_models' );
+
+		$this->loader->add_action( 'wp_ajax_get_odoo_fields', $plugin_admin, 'get_odoo_fields' );
+		
+		// Add Settings link to the plugin
+		$plugin_basename = plugin_basename( plugin_dir_path( __DIR__ ) . $this->plugin_name . '.php' );
+		$this->loader->add_filter( 'plugin_action_links_' . $plugin_basename, $plugin_admin, 'add_action_links' );
 
 	}
 

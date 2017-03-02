@@ -23,14 +23,17 @@
 class Wp_Odoo_Form_Integrator_Deactivator {
 
 	/**
-	 * Short Description. (use period)
+	 * Deactivates the plugin.
 	 *
-	 * Long Description.
+	 * Deletes options and tables from the database when the plugin is deactivated.
 	 *
 	 * @since    1.0.0
 	 */
 	public static function deactivate() {
-
+		delete_option('cc_odoo_integrator_odoo_url');
+		delete_option('cc_odoo_integrator_odoo_database');
+		delete_option('cc_odoo_integrator_odoo_username');
+		delete_option('cc_odoo_integrator_odoo_password');
 	}
 
 }

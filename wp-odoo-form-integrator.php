@@ -15,7 +15,7 @@
  * @wordpress-plugin
  * Plugin Name:       WP Odoo Form Integrator
  * Plugin URI:        http://www.coderscom.com/
- * Description:       This is a short description of what the plugin does. It's displayed in the WordPress admin area.
+ * Description:       WP Odoo Form Integrator plugin is a bridge between several highly used Wordpress form plugins and Odoo.
  * Version:           1.0.0
  * Author:            Coderscom
  * Author URI:        http://www.coderscom.com/
@@ -28,6 +28,16 @@
 // If this file is called directly, abort.
 if ( ! defined( 'WPINC' ) ) {
 	die;
+}
+
+// Register class name of modules here.
+$wp_odoo_form_modules = array( 'Wp_Odoo_Form_Integrator_Form_Contact_7' );
+
+/**
+ * Include all of the form integration files
+ */
+foreach ( glob( dirname( __FILE__ ) . "/modules/*.*" ) as $filename ) {
+	require_once $filename;
 }
 
 /**

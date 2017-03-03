@@ -1,0 +1,24 @@
+/**
+ * All of the CSS for your admin-specific functionality should be
+ * included in this file.
+ */
+
+.hidden { display: none; }
+
+.delete {
+  cursor: pointer;
+  color: #800000;
+}
+
+.delete:hover { 
+  color: red;
+}
+
+.edit {
+  cursor: pointer;
+  color: #000080;
+}
+
+.edit:hover { 
+  color: #0000FF;
+}

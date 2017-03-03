@@ -150,7 +150,7 @@ class Wp_Odoo_Form_Integrator_Admin {
     	);
 
     	add_submenu_page(
-	        'wp-odoo-form-integrator',
+	        $this->plugin_name,
 	        __( 'Add New', 'wp-odoo-form-integrator' ),
 	        __( 'Add New', 'wp-odoo-form-integrator' ),
 	        'manage_options',
@@ -159,7 +159,16 @@ class Wp_Odoo_Form_Integrator_Admin {
     	);
 
     	add_submenu_page(
-	        'wp-odoo-form-integrator',
+	        null,
+	        __( 'Edit Mapping', 'wp-odoo-form-integrator' ),
+	        __( 'Edit Mapping', 'wp-odoo-form-integrator' ),
+	        'manage_options',
+	        'wp-odoo-form-integrator-edit-mapping',
+	        array($this, 'display_plugin_edit_mapping_page')
+    	);
+
+    	add_submenu_page(
+	        $this->plugin_name,
 	        __( 'Settings', 'wp-odoo-form-integrator' ),
 	        __( 'Settings', 'wp-odoo-form-integrator' ),
 	        'manage_options',
@@ -356,6 +365,9 @@ class Wp_Odoo_Form_Integrator_Admin {
 	 * @since    1.0.0
 	 */
 	public function display_plugin_integrated_forms_page() {
+
+		wp_enqueue_style( $this->plugin_name, plugin_dir_url( __FILE__ ) . 'css/wp-odoo-form-integrator-admin-integrated-forms.css', array(), $this->version, 'all' );
+
 	    include_once( 'partials/wp-odoo-form-integrator-admin-display-integrated-forms.php' );
 	}
 
@@ -364,8 +376,7 @@ class Wp_Odoo_Form_Integrator_Admin {
 	 *
 	 * @since    1.0.0
 	 */
-	public function display_plugin_add_new_page() {
-
+	private function include_common_form_mapping() {
 		wp_enqueue_style( $this->plugin_name, plugin_dir_url( __FILE__ ) . 'css/wp-odoo-form-integrator-admin-settings.css', array(), $this->version, 'all' );
 		wp_enqueue_script( $this->plugin_name, plugin_dir_url( __FILE__ ) . 'js/wp-odoo-form-integrator-admin-add-new.js', array( 'jquery' ), $this->version, true );
 
@@ -386,7 +397,46 @@ class Wp_Odoo_Form_Integrator_Admin {
 		wp_localize_script( $this->plugin_name, 'wp_odoo_form_integrator_admin_add_new', $this->js_object );
 
 	    include_once( 'partials/wp-odoo-form-integrator-admin-display-add-new.php' );
+	}
 
+	/**
+	 * Render integrated forms page for this plugin.
+	 *
+	 * @since    1.0.0
+	 */
+	public function display_plugin_add_new_page() {
+
+		$this->js_object['str_page_title'] = __( 'Add New Odoo-Form Mapping', 'wp-odoo-form-integrator' );
+		$this->include_common_form_mapping();
+
+	}
+
+	/**
+	 * Render integrated forms page for this plugin.
+	 *
+	 * @since    1.0.0
+	 */
+	public function display_plugin_edit_mapping_page() {
+		if (isset($_GET['wp_odoo_form_form_to_edit'])){
+			global $wpdb;
+			$cc_odoo_integrator_forms = $wpdb->prefix . 'cc_odoo_integrator_forms';	
+			$cc_odoo_integrator_field_mapping = $wpdb->prefix . 'cc_odoo_integrator_field_mapping';
+			$sql = "SELECT A.id, A.title, A.form_type, A.form, A.odoo_model FROM ". 
+					$cc_odoo_integrator_forms ." A WHERE A.id = ".$_GET['wp_odoo_form_form_to_edit'];
+			$result = $wpdb->get_row($sql);
+			$this->js_object['str_odoo_form_id'] = $result->id;
+			$this->js_object['str_odoo_form_title'] = $result->title;
+			$this->js_object['str_odoo_form_form_type'] = $result->form_type;
+			$this->js_object['str_odoo_form_form'] = $result->form;
+			$this->js_object['str_odoo_form_odoo_model'] = $result->odoo_model;
+
+			$sql = "SELECT A.odoo_field,  A.field_type, A.form_field FROM ".
+					$cc_odoo_integrator_field_mapping . " A WHERE A.parent_id = ".$result->id;
+			$result = $wpdb->get_results($sql);
+			$this->js_object['str_odoo_form_odoo_mapped_fields'] = $result;
+		}
+		$this->js_object['str_page_title'] = __( 'Edit Odoo-Form Mapping', 'wp-odoo-form-integrator' );
+		$this->include_common_form_mapping();
 	}
 
 }

@@ -33,6 +33,12 @@
 
 	var selected_form_type, selected_form, selected_odoo_model;
 
+	$('#pagetitle').text(wp_odoo_form_integrator_admin_add_new.str_page_title);
+
+	if (wp_odoo_form_integrator_admin_add_new['str_odoo_form_title']){
+		$('#wp_odoo_form_add_new_id').val(wp_odoo_form_integrator_admin_add_new.str_odoo_form_id);		
+		$('#wp_odoo_form_add_new_title').val(wp_odoo_form_integrator_admin_add_new.str_odoo_form_title);
+	}
 
 	$(document).ready(function (){
 		jQuery.ajax({
@@ -42,7 +48,6 @@
 				'action': 'get_form_types'
 			},
 			success:function(data){
-				console.log(data);
 				var json = JSON.parse(data);
                 var $el = $("#wp_odoo_form_add_new_form_type");
                 $el.append($("<option></option>")
@@ -51,6 +56,10 @@
                     $el.append($("<option></option>")
                             .attr("value", value).text(key));
                 });
+				if (wp_odoo_form_integrator_admin_add_new['str_odoo_form_form_type']){
+					$('#wp_odoo_form_add_new_form_type').val(wp_odoo_form_integrator_admin_add_new.str_odoo_form_form_type);
+					$('#wp_odoo_form_add_new_form_type').trigger("change");
+				}
 			},
 			error: function(param1, param2, param3){
 				$("#p_notice").text(wp_odoo_form_integrator_admin_add_new.str_notice_ajax_failed);
@@ -65,14 +74,10 @@
 				'action': 'get_odoo_models'
 			},
 			success:function(data){
-				console.log(data);
+				// console.log(data);
 				var json = JSON.parse(data);
 				if (!json['status']){
 					alert(wp_odoo_form_integrator_admin_add_new.str_unable_fetch_odoo_model);
-					// document.location.href = "admin.php?page=wp-odoo-form-integrator-settings";
-					// $("#p_notice").text(wp_odoo_form_integrator_admin_add_new.str_unable_fetch_odoo_model);
-					// $("#div_notice").removeClass('hidden');
-					// $("#div_notice").addClass('notice-error');
 				}
                 var $el = $("#wp_odoo_form_add_new_odoo_model");
                 $el.append($("<option></option>")
@@ -104,7 +109,11 @@
 				    	parts[1] = '';
 				    }
 				    $(this).text((parts[0]+parts[1]).replace(/ /g, '\u00a0')).text;
-				});                
+				});
+				if (wp_odoo_form_integrator_admin_add_new['str_odoo_form_odoo_model']){
+					$('#wp_odoo_form_add_new_odoo_model').val(wp_odoo_form_integrator_admin_add_new.str_odoo_form_odoo_model);
+					$('#wp_odoo_form_add_new_odoo_model').trigger("change");
+				}
 			},
 			error: function(param1, param2, param3){
 				$("#p_notice").text(wp_odoo_form_integrator_admin_add_new.str_notice_ajax_failed);
@@ -137,7 +146,7 @@
 					'module': this.value
 				},
 				success:function(data){
-					console.log(data);
+					// console.log(data);
 					var json = JSON.parse(data);
 	                var $el = $("#wp_odoo_form_add_new_plugin_form");
 	                $el.empty();
@@ -147,6 +156,10 @@
 	                    $el.append($("<option></option>")
 	                            .attr("value", value).text(key));
 	                });
+					if (wp_odoo_form_integrator_admin_add_new['str_odoo_form_form']){
+						$('#wp_odoo_form_add_new_plugin_form').val(wp_odoo_form_integrator_admin_add_new.str_odoo_form_form);
+						$('#wp_odoo_form_add_new_plugin_form').trigger("change");
+					}
 				},
 				error: function(param1, param2, param3){
 					$("#p_notice").text(wp_odoo_form_integrator_admin_add_new.str_notice_ajax_failed);
@@ -178,7 +191,7 @@
 					'form_id': this.value
 				},
 				success:function(data){
-					console.log(data);
+					// console.log(data);
 					form_fields = JSON.parse(data);
 					if (odoo_fields){
 						$.each(odoo_fields, function(key, obj) {
@@ -234,11 +247,12 @@
 					'form_id': this.value
 				},
 				success:function(data){
-					console.log(data);
+					// console.log(data);
 					odoo_fields = JSON.parse(data);
 					$("#wp_odoo_form_add_new_mapping_table > tbody").html("");
+
 					$.each(odoo_fields, function(key, obj) {
-						console.log(key+" : "+obj.string);
+						// console.log(key+" : "+obj.string);
 						$('#wp_odoo_form_add_new_mapping_table tbody')
 							.append('<tr>' +
 										'<td class="row-title">' +
@@ -264,6 +278,13 @@
 	    					$("#"+key).hide();
 						}
 					});
+					if (form_fields && wp_odoo_form_integrator_admin_add_new['str_odoo_form_odoo_mapped_fields']){
+		                $.each(wp_odoo_form_integrator_admin_add_new.str_odoo_form_odoo_mapped_fields, function(value, key) {
+		                	if (key['form_field']){
+			                	$("#"+key['odoo_field']).val(key['form_field']);
+		                	}
+		                });
+					}
 				},
 				error: function(param1, param2, param3){
 					console.log('error');
@@ -302,16 +323,18 @@
 			error_found = true;
 			error_field = "wp_odoo_form_add_new_odoo_model";
 		}
-		$.each(odoo_fields, function(key, obj) {
-			console.log($("#"+key).val());
-			if($("#"+key).val()){
-				error_found = false;
-				return false;
-			}
-			$("#p_notice").text(wp_odoo_form_integrator_admin_add_new.str_error_mapping_no_fields);
-			error_found = true;
-			error_field = "wp_odoo_form_add_new_odoo_model";
-		});
+		if (!error_found){
+			$.each(odoo_fields, function(key, obj) {
+				console.log($("#"+key).val());
+				if($("#"+key).val()){
+					error_found = false;
+					return false;
+				}
+				$("#p_notice").text(wp_odoo_form_integrator_admin_add_new.str_error_mapping_no_fields);
+				error_found = true;
+				error_field = "wp_odoo_form_add_new_odoo_model";
+			});
+		}
 		if(error_found){
 			$("#div_notice").removeClass('hidden');
 			$("#div_notice").addClass('notice-error');
@@ -336,7 +359,7 @@
 	    		}
 	    	}
 	    },
-	    ajaxStop: function() { 
+	    ajaxStop: function() {
 	    	$('#loading_gif').removeClass("modal"); 
 	    }    
 	});

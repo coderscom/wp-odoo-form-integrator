@@ -35,3 +35,21 @@ body.loading {
 body.loading .modal {
     display: block;
 }
+
+.delete {
+  cursor: pointer;
+  color: #800000;
+}
+
+.delete:hover { 
+  color: red;
+}
+
+.edit {
+  cursor: pointer;
+  color: #000080;
+}
+
+.edit:hover { 
+  color: #0000FF;
+}

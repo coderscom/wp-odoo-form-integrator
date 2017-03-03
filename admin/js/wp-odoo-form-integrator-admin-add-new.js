@@ -38,6 +38,8 @@
 	if (wp_odoo_form_integrator_admin_add_new['str_odoo_form_title']){
 		$('#wp_odoo_form_add_new_id').val(wp_odoo_form_integrator_admin_add_new.str_odoo_form_id);		
 		$('#wp_odoo_form_add_new_title').val(wp_odoo_form_integrator_admin_add_new.str_odoo_form_title);
+	}else{
+		$('#wp_odoo_form_add_new_id').remove();
 	}
 
 	$(document).ready(function (){

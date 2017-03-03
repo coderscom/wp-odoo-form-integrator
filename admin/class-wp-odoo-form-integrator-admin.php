@@ -367,7 +367,78 @@ class Wp_Odoo_Form_Integrator_Admin {
 	public function display_plugin_integrated_forms_page() {
 
 		wp_enqueue_style( $this->plugin_name, plugin_dir_url( __FILE__ ) . 'css/wp-odoo-form-integrator-admin-integrated-forms.css', array(), $this->version, 'all' );
+		wp_enqueue_script( $this->plugin_name, plugin_dir_url( __FILE__ ) . 'js/wp-odoo-form-integrator-admin-integrated-forms.js', array( 'jquery' ), $this->version, true );
 
+		global $wpdb;
+		$cc_odoo_integrator_forms = $wpdb->prefix . 'cc_odoo_integrator_forms';	
+		$cc_odoo_integrator_field_mapping = $wpdb->prefix . 'cc_odoo_integrator_field_mapping';
+		if (isset($_POST['wp_odoo_form_add_new_record'])){
+			$form_data = array(
+							'title' => $_POST['wp_odoo_form_add_new_title'],
+							'form_type' => $_POST['wp_odoo_form_add_new_form_type'],
+							'form' => $_POST['wp_odoo_form_add_new_plugin_form'],
+							'odoo_model' => $_POST['wp_odoo_form_add_new_odoo_model']
+						);
+			$update_action = false;
+			if (isset($_POST['wp_odoo_form_add_new_id'])){
+				$wpdb->update(
+					$cc_odoo_integrator_forms, 
+					$form_data, 
+					array( 'ID' => $_POST['wp_odoo_form_add_new_id'] ), 
+					array( '%s', '%s', '%s', '%s'), 
+					array( '%d' )
+				);
+				$update_action = true;
+				$parent_id = $_POST['wp_odoo_form_add_new_id'];
+				unset($_POST['wp_odoo_form_add_new_id']);
+			}else{
+				$wpdb->insert($cc_odoo_integrator_forms, $form_data);			
+				$parent_id = $wpdb->insert_id;
+			}
+			unset($_POST['wp_odoo_form_add_new_title']);
+			unset($_POST['wp_odoo_form_add_new_form_type']);
+			unset($_POST['wp_odoo_form_add_new_plugin_form']);
+			unset($_POST['wp_odoo_form_add_new_odoo_model']);
+			unset($_POST['wp_odoo_form_add_new_record']);
+			if ($update_action){
+				$wpdb->delete( $cc_odoo_integrator_field_mapping, 
+							   array( 'parent_id' => $parent_id ), array( '%d' ) );
+			}
+			foreach ($_POST as $key => $value) {
+				$form_data = array(
+								'parent_id' => $parent_id,
+								'odoo_field' => $key,
+								'field_type' => 'char',
+								'form_field' => $value
+							);
+				$wpdb->insert($cc_odoo_integrator_field_mapping, $form_data);
+			}
+			$this->js_object['str_notice_success_message'] = __( 'Odoo-Form Mapping is successfully saved', 'wp-odoo-form-integrator' );
+		}else if (isset($_POST['wp_odoo_form_form_to_delete'])){
+			$ret = $wpdb->delete( $cc_odoo_integrator_forms, array( 'id' => $_POST['wp_odoo_form_form_to_delete'] ), array( '%d' ) );
+			$ret = $wpdb->delete( $cc_odoo_integrator_field_mapping, array( 'parent_id' => $_POST['wp_odoo_form_form_to_delete'] ), array( '%d' ));
+			$this->js_object['str_notice_success_message'] = __( 'Odoo-Form Mapping is successfully deleted', 'wp-odoo-form-integrator' );
+		}
+
+		$rec_limit = 20;
+		$sql = "SELECT count(id) as total FROM ". $cc_odoo_integrator_forms;
+		$result = $wpdb->get_row($sql);
+		$rec_count = $result->total;
+		if( isset($_GET{'pageno'} ) ) {
+	        $page = $_GET{'pageno'}-1;
+	        $offset = $rec_limit * $page ;
+	    }else {
+	        $page = 0;
+	        $offset = 0;
+	    }
+	    $left_rec = $rec_count - ($page * $rec_limit);
+	    $max_page = ceil($rec_count / $rec_limit);
+		$sql = "SELECT A.id, A.title, A.form_type, A.form, A.odoo_model, COUNT(B.id) as mapped_fields_count ".
+			   "FROM ". $cc_odoo_integrator_forms ." as A LEFT JOIN ".
+			   $cc_odoo_integrator_field_mapping." as B ON A.id = B.parent_id GROUP BY A.id ".
+			   "LIMIT $rec_limit OFFSET $offset";
+		$result = $wpdb->get_results($sql);
+		wp_localize_script( $this->plugin_name, 'wp_odoo_form_integrator_integrated_forms', $this->js_object );
 	    include_once( 'partials/wp-odoo-form-integrator-admin-display-integrated-forms.php' );
 	}
 

@@ -254,17 +254,22 @@
 					$("#wp_odoo_form_add_new_mapping_table > tbody").html("");
 
 					$.each(odoo_fields, function(key, obj) {
-						// console.log(key+" : "+obj.string);
 						$('#wp_odoo_form_add_new_mapping_table tbody')
 							.append('<tr>' +
 										'<td class="row-title">' +
 											'<label for="tablecell">'+obj.string+'</label>' +
 										'</td>' +
 										'<td>' +
+											'<label for="tablecell"><code>'+key+'</code></label>' +
+										'</td>' +
+										'<td>' +
 											'<label for="tablecell"><code>'+obj.type+'</code></label>' +
 										'</td>' +
 										'<td>' +
-											'<select name="'+key+'" id="'+key+'" class="regular-text"></select>' +
+											'<label for="tablecell">'+((obj.required)?'<mark> required <mark>':'optional')+'</label>' +
+										'</td>' +
+										'<td>' +
+											'<select name="'+key+'" id="'+key+'" class="small-text"></select>' +
 										'</td>' +
 									'</tr>');
 						if (form_fields){

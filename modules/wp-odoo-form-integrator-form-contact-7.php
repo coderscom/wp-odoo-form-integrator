@@ -38,6 +38,15 @@ class Wp_Odoo_Form_Integrator_Form_Contact_7 extends Wp_Odoo_Form_Integrator_Abs
      *
      * @since    1.0.0
      */
+    public function get_action_tag(){
+        return "wpcf7_mail_sent";
+    }
+
+    /**
+     * Register the stylesheets for the admin area.
+     *
+     * @since    1.0.0
+     */
     public function get_plugin_name(){
         return "Contact Form 7";
     }
@@ -63,8 +72,8 @@ class Wp_Odoo_Form_Integrator_Form_Contact_7 extends Wp_Odoo_Form_Integrator_Abs
      *
      * @since    1.0.0
      */
-    public function get_form_fields($formID){
-        $args = get_post_meta( $formID, '_form', 'true' );
+    public function get_form_fields($form_id){
+        $args = get_post_meta( $form_id, '_form', 'true' );
         preg_match_all( '/\[([^\]]*)\]/', $args, $matches );
         if ( isset( $matches['1'] ) ) {
             foreach ( $matches['1'] as $fields ) {
@@ -75,4 +84,17 @@ class Wp_Odoo_Form_Integrator_Form_Contact_7 extends Wp_Odoo_Form_Integrator_Abs
         return $result;
     }
 
+    /**
+     * Register the stylesheets for the admin area.
+     *
+     * @since    1.0.0
+     */
+    public function handle_callback($contact_form){
+        $submission = WPCF7_Submission::get_instance();
+        if ( $submission ) {
+            $form_id        = $contact_form->id();
+            $posted_data    = $submission->get_posted_data();
+            do_action( 'wp_odoo_form_integrator_push_to_odoo', __CLASS__, $form_id, $posted_data );
+        }
+    }
 }

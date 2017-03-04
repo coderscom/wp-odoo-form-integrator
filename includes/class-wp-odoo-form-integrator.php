@@ -75,6 +75,7 @@ class Wp_Odoo_Form_Integrator {
 		$this->set_locale();
 		$this->define_admin_hooks();
 		$this->define_public_hooks();
+		$this->define_form_hooks();
 
 	}
 
@@ -188,6 +189,31 @@ class Wp_Odoo_Form_Integrator {
 		$this->loader->add_action( 'wp_enqueue_scripts', $plugin_public, 'enqueue_scripts' );
 
 	}
+
+	/**
+	 * Register all of the hooks related to the public-facing functionality
+	 * of the plugin.
+	 *
+	 * @since    1.0.0
+	 * @access   private
+	 */
+	private function define_form_hooks() {
+
+		global $wp_odoo_form_modules;
+		foreach ($wp_odoo_form_modules as $module) {
+			$object = new $module();
+			$this->loader->add_action( $object->get_action_tag(), $object, 'handle_callback' );
+		}
+		require_once plugin_dir_path( dirname( __FILE__ ) ) . 'includes/class-wp-odoo-client.php';
+		$client = new Wp_Odoo_Client(get_option('wp_odoo_form_odoo_url'),
+									 get_option('wp_odoo_form_odoo_database'),
+									 get_option('wp_odoo_form_odoo_username'),
+									 get_option('wp_odoo_form_odoo_password'));
+		$this->loader->add_action( 'wp_odoo_form_integrator_push_to_odoo', 
+								   $client, 'push_to_odoo', 10, 3 );
+
+	}
+
 
 	/**
 	 * Run the loader to execute all of the hooks with WordPress.

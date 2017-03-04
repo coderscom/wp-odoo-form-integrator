@@ -59,9 +59,11 @@
 				<table class="widefat" id="wp_odoo_form_add_new_mapping_table">
 					<thead>
 					<tr>
-						<th class="row-title"><?php esc_attr_e( 'Odoo Fields', 'wp-odoo-form-integrator' ); ?></th>
-						<th><?php esc_attr_e( 'Field Type', 'wp-odoo-form-integrator' ); ?></th>
-						<th><?php esc_attr_e( 'Form Fields', 'wp-odoo-form-integrator' ); ?></th>
+						<th width='35%' class="row-title"><?php esc_attr_e( 'Odoo Field', 'wp-odoo-form-integrator' ); ?></th>
+						<th width='20%'><?php esc_attr_e( 'Field Key', 'wp-odoo-form-integrator' ); ?></th>
+						<th width='15%'><?php esc_attr_e( 'Field Type', 'wp-odoo-form-integrator' ); ?></th>
+						<th width='10%'><?php esc_attr_e( 'Required', 'wp-odoo-form-integrator' ); ?></th>
+						<th width='20%'><?php esc_attr_e( 'Form Field', 'wp-odoo-form-integrator' ); ?></th>
 					</tr>
 					</thead>
 					<tbody>

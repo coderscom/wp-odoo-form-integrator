@@ -274,12 +274,6 @@ class Wp_Odoo_Form_Integrator_Admin {
 	public function get_odoo_models() {
 
 		$result = array();
-		/**
-		 * TODO: Fetch name and key of all models dynamically from Odoo
-		 */
-		// $result['crm.lead'] = 'crm.lead';
-		// $result['res.partner'] = 'res.partner';
-		// echo json_encode($result);
 		require_once plugin_dir_path( dirname( __FILE__ ) ) . 'includes/class-wp-odoo-client.php';
 		$client = new Wp_Odoo_Client(get_option('wp_odoo_form_odoo_url'),
 									 get_option('wp_odoo_form_odoo_database'),
@@ -420,7 +414,7 @@ class Wp_Odoo_Form_Integrator_Admin {
 			$this->js_object['str_notice_success_message'] = __( 'Odoo-Form Mapping is successfully deleted', 'wp-odoo-form-integrator' );
 		}
 
-		$rec_limit = 20;
+		$rec_limit = 50;
 		$sql = "SELECT count(id) as total FROM ". $cc_odoo_integrator_forms;
 		$result = $wpdb->get_row($sql);
 		$rec_count = $result->total;

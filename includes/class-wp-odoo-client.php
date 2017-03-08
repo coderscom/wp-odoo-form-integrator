@@ -185,32 +185,36 @@ class Wp_Odoo_Client {
 	}
 
 	public function push_to_odoo($type, $id, $data){
-		$res = $this->get_uid();
-		if (is_integer($res)) {
-			$rclient = ripcord::client($this->url."/xmlrpc/2/object");
-			global $wpdb;
-			$cc_odoo_integrator_forms = $wpdb->prefix . 'cc_odoo_integrator_forms';	
-			$cc_odoo_integrator_field_mapping = $wpdb->prefix . 'cc_odoo_integrator_field_mapping';
-			$sql = "SELECT A.id, A.odoo_model FROM " . $cc_odoo_integrator_forms . " as A " .
-				   "WHERE A.form_type = '".$type."' AND A.form = ".$id;
-			$form_ids = $wpdb->get_results($sql);
-			foreach ( $form_ids as $form_row ) {
-				$sql = "SELECT A.odoo_field,  A.field_type, A.form_field FROM ".
-						$cc_odoo_integrator_field_mapping . " A WHERE A.parent_id = ".$form_row->id;
-				$mappings = $wpdb->get_results($sql);
-				$fields = array();
-				foreach ( $mappings as $map_row ) {
-					if ($map_row->form_field!=='') {
-						$fields[$map_row->odoo_field] = $data[$map_row->form_field];
+		try {
+			$res = $this->get_uid();
+			if (is_integer($res)) {
+				$rclient = ripcord::client($this->url."/xmlrpc/2/object");
+				global $wpdb;
+				$cc_odoo_integrator_forms = $wpdb->prefix . 'cc_odoo_integrator_forms';	
+				$cc_odoo_integrator_field_mapping = $wpdb->prefix . 'cc_odoo_integrator_field_mapping';
+				$sql = "SELECT A.id, A.odoo_model FROM " . $cc_odoo_integrator_forms . " as A " .
+					   "WHERE A.form_type = '".$type."' AND A.form = ".$id;
+				$form_ids = $wpdb->get_results($sql);
+				foreach ( $form_ids as $form_row ) {
+					$sql = "SELECT A.odoo_field,  A.field_type, A.form_field FROM ".
+							$cc_odoo_integrator_field_mapping . " A WHERE A.parent_id = ".$form_row->id;
+					$mappings = $wpdb->get_results($sql);
+					$fields = array();
+					foreach ( $mappings as $map_row ) {
+						if ($map_row->form_field!=='') {
+							$fields[$map_row->odoo_field] = $data[$map_row->form_field];
+						}
 					}
+					$data_fields = array();
+					array_push($data_fields, $fields);
+					$ret = $rclient->execute_kw($this->database, $this->get_uid(), 
+											   $this->password, $form_row->odoo_model, 'create', 
+											   $data_fields);
 				}
-				$data_fields = array();
-				array_push($data_fields, $fields);
-				$ret = $rclient->execute_kw($this->database, $this->get_uid(), 
-										   $this->password, $form_row->odoo_model, 'create', 
-										   $data_fields);
 			}
-		}
+		} catch (Exception $e) {
+			error_log($e->getMessage(), 0);
+		}		
 	}
 
 }

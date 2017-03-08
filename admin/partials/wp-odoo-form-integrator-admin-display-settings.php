@@ -19,10 +19,10 @@
 <div class="wrap">
 <?php
 	if (isset($_POST['wp_odoo_form_odoo_properties'])){
-		update_option( 'wp_odoo_form_odoo_url', $_POST['wp_odoo_form_odoo_url']);
-		update_option( 'wp_odoo_form_odoo_database', $_POST['wp_odoo_form_odoo_database']);
-		update_option( 'wp_odoo_form_odoo_username', $_POST['wp_odoo_form_odoo_username']);
-		update_option( 'wp_odoo_form_odoo_password', $_POST['wp_odoo_form_odoo_password']);
+		update_option( 'cc_odoo_integrator_odoo_url', $_POST['cc_odoo_integrator_odoo_url']);
+		update_option( 'cc_odoo_integrator_odoo_database', $_POST['cc_odoo_integrator_odoo_database']);
+		update_option( 'cc_odoo_integrator_odoo_username', $_POST['cc_odoo_integrator_odoo_username']);
+		update_option( 'cc_odoo_integrator_odoo_password', $_POST['cc_odoo_integrator_odoo_password']);
 ?>
 <div id="div_notice" class="notice notice-success"><p id="p_notice"><?php esc_html_e( 'Settings successfully saved', 'wp-odoo-form-integrator' ); ?></p></div>
 <?php
@@ -39,28 +39,28 @@
 		<tr valign="top">
 			<th scope="row"><?php esc_html_e( 'URL', 'wp-odoo-form-integrator' ); ?></th>
 			<td>
-				<input type="text" class="regular-text" name="wp_odoo_form_odoo_url" id="wp_odoo_form_odoo_url" value="<?php echo get_option('wp_odoo_form_odoo_url'); ?>" />
+				<input type="text" class="regular-text" name="cc_odoo_integrator_odoo_url" id="cc_odoo_integrator_odoo_url" value="<?php echo get_option('cc_odoo_integrator_odoo_url'); ?>" />
 			</td>
 		</tr>
 
 		<tr valign="top">
 			<th scope="row"><?php esc_html_e( 'Database', 'wp-odoo-form-integrator' ); ?></th>
 			<td>
-				<input type="text" class="all-options" name="wp_odoo_form_odoo_database" id="wp_odoo_form_odoo_database" value="<?php echo get_option('wp_odoo_form_odoo_database'); ?>" />
+				<input type="text" class="all-options" name="cc_odoo_integrator_odoo_database" id="cc_odoo_integrator_odoo_database" value="<?php echo get_option('cc_odoo_integrator_odoo_database'); ?>" />
 			</td>
 		</tr>
 
 		<tr valign="top">
 			<th scope="row"><?php esc_html_e( 'Username', 'wp-odoo-form-integrator' ); ?></th>
 			<td>
-				<input type="text" class="all-options" name="wp_odoo_form_odoo_username" id="wp_odoo_form_odoo_username" value="<?php echo get_option('wp_odoo_form_odoo_username'); ?>" />
+				<input type="text" class="all-options" name="cc_odoo_integrator_odoo_username" id="cc_odoo_integrator_odoo_username" value="<?php echo get_option('cc_odoo_integrator_odoo_username'); ?>" />
 			</td>
 		</tr>
 
 		<tr valign="top">
 			<th scope="row"><?php esc_html_e( 'Password', 'wp-odoo-form-integrator' ); ?></th>
 			<td>
-				<input type="text" class="all-options" name="wp_odoo_form_odoo_password" id="wp_odoo_form_odoo_password" value="<?php echo get_option('wp_odoo_form_odoo_password'); ?>" />
+				<input type="text" class="all-options" name="cc_odoo_integrator_odoo_password" id="cc_odoo_integrator_odoo_password" value="<?php echo get_option('cc_odoo_integrator_odoo_password'); ?>" />
 			</td>
 		</tr>
 

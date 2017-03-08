@@ -42,10 +42,10 @@
 				url: ajaxurl,
 				data: {
 					'action': 'test_odoo_connection',
-					'wp_odoo_form_odoo_url': $("#wp_odoo_form_odoo_url").val(),
-					'wp_odoo_form_odoo_database': $("#wp_odoo_form_odoo_database").val(),
-					'wp_odoo_form_odoo_username': $("#wp_odoo_form_odoo_username").val(),
-					'wp_odoo_form_odoo_password': $("#wp_odoo_form_odoo_password").val()
+					'cc_odoo_integrator_odoo_url': $("#cc_odoo_integrator_odoo_url").val(),
+					'cc_odoo_integrator_odoo_database': $("#cc_odoo_integrator_odoo_database").val(),
+					'cc_odoo_integrator_odoo_username': $("#cc_odoo_integrator_odoo_username").val(),
+					'cc_odoo_integrator_odoo_password': $("#cc_odoo_integrator_odoo_password").val()
 				},
 				success:function(data){
 					var res = JSON.parse(data);
@@ -74,22 +74,22 @@
 		$("#div_notice").addClass('hidden');
 		var error_found;
 		var error_field;
-		if(!validateURL($("#wp_odoo_form_odoo_url").val())){
+		if(!validateURL($("#cc_odoo_integrator_odoo_url").val())){
 			$("#p_notice").text(wp_odoo_form_integrator_admin_settings.str_error_odoo_url);
 			error_found = true;
-			error_field = "wp_odoo_form_odoo_url";
-		}else if(!$("#wp_odoo_form_odoo_database").val()){
+			error_field = "cc_odoo_integrator_odoo_url";
+		}else if(!$("#cc_odoo_integrator_odoo_database").val()){
 			$("#p_notice").text(wp_odoo_form_integrator_admin_settings.str_error_odoo_database);
 			error_found = true;
-			error_field = "wp_odoo_form_odoo_database";
-		}else if(!$("#wp_odoo_form_odoo_username").val()){
+			error_field = "cc_odoo_integrator_odoo_database";
+		}else if(!$("#cc_odoo_integrator_odoo_username").val()){
 			$("#p_notice").text(wp_odoo_form_integrator_admin_settings.str_error_odoo_username);
 			error_found = true;
-			error_field = "wp_odoo_form_odoo_username";
-		}else if(!$("#wp_odoo_form_odoo_password").val()){
+			error_field = "cc_odoo_integrator_odoo_username";
+		}else if(!$("#cc_odoo_integrator_odoo_password").val()){
 			$("#p_notice").text(wp_odoo_form_integrator_admin_settings.str_error_odoo_password);
 			error_found = true;
-			error_field = "wp_odoo_form_odoo_password";
+			error_field = "cc_odoo_integrator_odoo_password";
 		}
 		if(error_found){
 			$("#div_notice").removeClass('hidden');

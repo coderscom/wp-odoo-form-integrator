@@ -192,10 +192,10 @@ class Wp_Odoo_Form_Integrator_Admin {
 		 */
 		require_once plugin_dir_path( dirname( __FILE__ ) ) . 'includes/class-wp-odoo-client.php';
 
-		$client = new Wp_Odoo_Client($_POST['wp_odoo_form_odoo_url'],
-									 $_POST['wp_odoo_form_odoo_database'],
-									 $_POST['wp_odoo_form_odoo_username'],
-									 $_POST['wp_odoo_form_odoo_password']);
+		$client = new Wp_Odoo_Client($_POST['cc_odoo_integrator_odoo_url'],
+									 $_POST['cc_odoo_integrator_odoo_database'],
+									 $_POST['cc_odoo_integrator_odoo_username'],
+									 $_POST['cc_odoo_integrator_odoo_password']);
 		try {
 			echo json_encode($client->test_authentication());
 		} catch (Exception $e) {
@@ -275,10 +275,10 @@ class Wp_Odoo_Form_Integrator_Admin {
 
 		$result = array();
 		require_once plugin_dir_path( dirname( __FILE__ ) ) . 'includes/class-wp-odoo-client.php';
-		$client = new Wp_Odoo_Client(get_option('wp_odoo_form_odoo_url'),
-									 get_option('wp_odoo_form_odoo_database'),
-									 get_option('wp_odoo_form_odoo_username'),
-									 get_option('wp_odoo_form_odoo_password'));
+		$client = new Wp_Odoo_Client(get_option('cc_odoo_integrator_odoo_url'),
+									 get_option('cc_odoo_integrator_odoo_database'),
+									 get_option('cc_odoo_integrator_odoo_username'),
+									 get_option('cc_odoo_integrator_odoo_password'));
 		try {
 			echo json_encode($client->get_models());
 		} catch (Exception $e) {
@@ -303,10 +303,10 @@ class Wp_Odoo_Form_Integrator_Admin {
 		 * This is RPC client library used to call Odoo APIs.
 		 */
 		require_once plugin_dir_path( dirname( __FILE__ ) ) . 'includes/class-wp-odoo-client.php';
-		$client = new Wp_Odoo_Client(get_option('wp_odoo_form_odoo_url'),
-									 get_option('wp_odoo_form_odoo_database'),
-									 get_option('wp_odoo_form_odoo_username'),
-									 get_option('wp_odoo_form_odoo_password'));
+		$client = new Wp_Odoo_Client(get_option('cc_odoo_integrator_odoo_url'),
+									 get_option('cc_odoo_integrator_odoo_database'),
+									 get_option('cc_odoo_integrator_odoo_username'),
+									 get_option('cc_odoo_integrator_odoo_password'));
 		try {
 			echo json_encode($client->get_fields($_POST['module']));
 		} catch (Exception $e) {

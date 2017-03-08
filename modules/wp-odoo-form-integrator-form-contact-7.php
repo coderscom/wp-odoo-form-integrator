@@ -20,9 +20,7 @@
  * @author     Coderscom <coderscom@outlook.com>
  */
 
-require_once dirname( __FILE__ ) . '/wp-odoo-form-integrator-abstract-base.php';
-
-class Wp_Odoo_Form_Integrator_Form_Contact_7 extends Wp_Odoo_Form_Integrator_Abstract_Base {
+class Wp_Odoo_Form_Integrator_Form_Contact_7 {
 
     /**
      * Register the stylesheets for the admin area.

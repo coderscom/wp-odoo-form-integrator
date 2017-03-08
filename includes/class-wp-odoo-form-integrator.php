@@ -200,15 +200,17 @@ class Wp_Odoo_Form_Integrator {
 	private function define_form_hooks() {
 
 		global $wp_odoo_form_modules;
-		foreach ($wp_odoo_form_modules as $module) {
-			$object = new $module();
-			$this->loader->add_action( $object->get_action_tag(), $object, 'handle_callback' );
+		if (isset($wp_odoo_form_modules)){
+			foreach ($wp_odoo_form_modules as $module) {
+				$object = new $module();
+				$this->loader->add_action( $object->get_action_tag(), $object, 'handle_callback' );
+			}
 		}
 		require_once plugin_dir_path( dirname( __FILE__ ) ) . 'includes/class-wp-odoo-client.php';
-		$client = new Wp_Odoo_Client(get_option('wp_odoo_form_odoo_url'),
-									 get_option('wp_odoo_form_odoo_database'),
-									 get_option('wp_odoo_form_odoo_username'),
-									 get_option('wp_odoo_form_odoo_password'));
+		$client = new Wp_Odoo_Client(get_option('cc_odoo_integrator_odoo_url'),
+									 get_option('cc_odoo_integrator_odoo_database'),
+									 get_option('cc_odoo_integrator_odoo_username'),
+									 get_option('cc_odoo_integrator_odoo_password'));
 		$this->loader->add_action( 'wp_odoo_form_integrator_push_to_odoo', 
 								   $client, 'push_to_odoo', 10, 3 );
 

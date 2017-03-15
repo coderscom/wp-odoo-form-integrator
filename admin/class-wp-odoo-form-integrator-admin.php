@@ -447,6 +447,7 @@ class Wp_Odoo_Form_Integrator_Admin {
 
 		$this->js_object['str_select_form_type'] = __( 'Please select form type', 'wp-odoo-form-integrator' );
 		$this->js_object['str_select_form'] = __( 'Please select form', 'wp-odoo-form-integrator' );
+		$this->js_object['str_select_form_fields'] = __( 'Please select form fields', 'wp-odoo-form-integrator' );
 		$this->js_object['str_select_odoo_model'] = __( 'Please select odoo model', 'wp-odoo-form-integrator' );
 		$this->js_object['str_form_type_change_warning'] = __( 'Change of form type will reset form and field mapping. Do you want to continue?', 'wp-odoo-form-integrator' );
 		$this->js_object['str_form_change_warning'] = __( 'Change of form will reset field mapping. Do you want to continue?', 'wp-odoo-form-integrator' );

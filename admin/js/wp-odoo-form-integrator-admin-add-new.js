@@ -202,7 +202,7 @@
 								$("#"+key).empty();
 				                var $el = $("#"+key);
 				                $el.append($("<option></option>")
-				                        .attr("value", '').text(wp_odoo_form_integrator_admin_add_new.str_select_form));
+				                        .attr("value", '').text(wp_odoo_form_integrator_admin_add_new.str_select_form_fields));
 				                $.each(form_fields, function(value, key) {
 				                    $el.append($("<option></option>")
 				                            .attr("value", value).text(key));
@@ -275,7 +275,7 @@
 						if (form_fields){
 			                var $el = $("#"+key);
 			                $el.append($("<option></option>")
-			                        .attr("value", '').text(wp_odoo_form_integrator_admin_add_new.str_select_form));
+			                        .attr("value", '').text(wp_odoo_form_integrator_admin_add_new.str_select_form_fields));
 			                $.each(form_fields, function(value, key) {
 			                    $el.append($("<option></option>")
 			                            .attr("value", value).text(key));

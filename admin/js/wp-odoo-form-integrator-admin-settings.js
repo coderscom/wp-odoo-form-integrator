@@ -105,4 +105,19 @@
 	  return urlregex.test(textval);
 	}
 
+	$(document).on({
+	    ajaxSend: function(event, request, settings) {
+	    	if (settings['data']){
+	    		if (settings['data'].match('action=test_odoo_connection')){
+			    	if (!$('#loading_gif').hasClass("modal")){
+			    		$('#loading_gif').addClass("modal");    
+			    	}
+	    		}
+	    	}
+	    },
+	    ajaxStop: function() {
+	    	$('#loading_gif').removeClass("modal"); 
+	    }    
+	});
+
 })( jQuery );

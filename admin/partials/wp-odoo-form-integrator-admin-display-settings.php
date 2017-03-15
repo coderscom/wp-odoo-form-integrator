@@ -78,3 +78,4 @@
 
 </form>
 </div>
+<div id="loading_gif"><!-- Place at bottom of page --></div>

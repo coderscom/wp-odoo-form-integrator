@@ -31,7 +31,9 @@ if ( ! defined( 'WPINC' ) ) {
 }
 
 // Register class name of modules here.
-$wp_odoo_form_modules = array( 'Wp_Odoo_Form_Integrator_Form_Contact_7' );
+$wp_odoo_form_modules = array( 'Wp_Odoo_Form_Integrator_Form_Contact_7',
+							   'Wp_Odoo_Form_Integrator_Ninja_Forms' );
+
 
 /**
  * Include all of the form integration files

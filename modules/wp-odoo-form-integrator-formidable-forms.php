@@ -20,7 +20,7 @@
  * @author     Coderscom <coderscom@outlook.com>
  */
 
-class Wp_Odoo_Form_Integrator_Ninja_Forms {
+class Wp_Odoo_Form_Integrator_Formidable_Forms {
 
     /**
      * Register the stylesheets for the admin area.
@@ -28,7 +28,7 @@ class Wp_Odoo_Form_Integrator_Ninja_Forms {
      * @since    1.0.0
      */
     public function get_plugin_slug(){
-        return "ninja-forms";
+        return "formidable";
     }
 
     /**
@@ -37,7 +37,7 @@ class Wp_Odoo_Form_Integrator_Ninja_Forms {
      * @since    1.0.0
      */
     public function get_action_tag(){
-        return "ninja_forms_after_submission";
+        return "frm_after_create_entry";
     }
 
     /**
@@ -46,7 +46,7 @@ class Wp_Odoo_Form_Integrator_Ninja_Forms {
      * @since    1.0.0
      */
     public function get_plugin_name(){
-        return "Ninja Forms";
+        return "Formidable Forms";
     }
 
     /**
@@ -55,9 +55,11 @@ class Wp_Odoo_Form_Integrator_Ninja_Forms {
      * @since    1.0.0
      */
     public function get_all_forms(){
-        $all_forms = ninja_forms_get_all_forms();
-        foreach ( $all_forms as $form ) {
-            $result[] = array( 'id' => $form['id'], 'label' => $form['name'] );
+        global $wpdb;
+        $query = 'select id, name from ' . $wpdb->prefix . 'frm_forms';
+        $formidable_forms = $wpdb->get_results( $query );
+        foreach( $formidable_forms as $form ) {
+            $result[] = array( 'id' => $form->id , 'label' => $form->name );
         }
         return $result;
     }
@@ -68,9 +70,18 @@ class Wp_Odoo_Form_Integrator_Ninja_Forms {
      * @since    1.0.0
      */
     public function get_form_fields($form_id){
-        $form_fields = ninja_forms_get_fields_by_form_id( $form_id );
+        global $wpdb;
+        $query = 'select id,default_value,name from '. $wpdb->prefix . 'frm_fields where form_id=%d';
+        $form_fields = $wpdb->get_results(
+                            $wpdb->prepare(
+                                $query,
+                                $form_id
+                            )
+                        );
+
         foreach ( $form_fields as $field ) {
-            $result[] = array( 'id' => $field["id"], 'label' => $field['data']['label'] );
+            $label = empty( $field->name )? $field->default_value : $field->name;
+            $result[] = array( 'id' => $field->id, 'label' => $label );
         }
         return $result;
     }
@@ -81,22 +92,19 @@ class Wp_Odoo_Form_Integrator_Ninja_Forms {
      * @since    1.0.0
      */
     public function get_callback_argument_count(){
-        return 1;
-    }    
+        return 2;
+    }
 
     /**
      * Register the stylesheets for the admin area.
      *
      * @since    1.0.0
      */
-    public function handle_callback($contact_form){
-        $posted_data = array();
-        if ( $contact_form ) {
-            $form_id        = $contact_form['form_id'];
-            foreach ($contact_form['fields'] as $key => $value) {
-                $posted_data[$value['id']] = $value['value'];
-            }
-            do_action( 'wp_odoo_form_integrator_push_to_odoo', __CLASS__, $form_id, $posted_data );
-        }
+    public function handle_callback($entry_id, $form_id){
+        error_log("entry_id = $entry_id", 0);
+        error_log("form_id = $form_id", 0);
+        $posted_data = $_POST['item_meta'];
+        error_log( print_r($posted_data, TRUE) );
+        do_action( 'wp_odoo_form_integrator_push_to_odoo', __CLASS__, $form_id, $posted_data );
     }
 }

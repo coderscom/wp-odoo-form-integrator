@@ -83,6 +83,15 @@ class Wp_Odoo_Form_Integrator_Form_Contact_7 {
     }
 
     /**
+     * Callback argument count
+     *
+     * @since    1.0.0
+     */
+    public function get_callback_argument_count(){
+        return 1;
+    }
+
+    /**
      * Register the stylesheets for the admin area.
      *
      * @since    1.0.0
@@ -92,6 +101,7 @@ class Wp_Odoo_Form_Integrator_Form_Contact_7 {
         if ( $submission ) {
             $form_id        = $contact_form->id();
             $posted_data    = $submission->get_posted_data();
+            error_log("CF7 ".print_r($posted_data, TRUE), 0);
             do_action( 'wp_odoo_form_integrator_push_to_odoo', __CLASS__, $form_id, $posted_data );
         }
     }

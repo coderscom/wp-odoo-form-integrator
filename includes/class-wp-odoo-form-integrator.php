@@ -203,9 +203,13 @@ class Wp_Odoo_Form_Integrator {
 		if (isset($wp_odoo_form_modules)){
 			foreach ($wp_odoo_form_modules as $module) {
 				$object = new $module();
-				$this->loader->add_action( $object->get_action_tag(), $object, 'handle_callback' );
+				$this->loader->add_action( $object->get_action_tag(), 
+										   $object, 
+										   'handle_callback',
+										   10, $object->get_callback_argument_count());
 			}
 		}
+
 		require_once plugin_dir_path( dirname( __FILE__ ) ) . 'includes/class-wp-odoo-client.php';
 		$client = new Wp_Odoo_Client(get_option('cc_odoo_integrator_odoo_url'),
 									 get_option('cc_odoo_integrator_odoo_database'),
